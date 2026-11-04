@@ -1,3 +1,14 @@
+/* NASA brand colours */
+:root {
+  --nasa-blue: #0b3d91;
+  --nasa-red: #fc3d21;
+  --nasa-black: #0b0b0f;
+  --ink: #e8ebf2;
+  --muted: #9aa5b8;
+  --panel: #12161f;
+  --line: #242b39;
+}
+
 /* Global reset & box sizing */
 * {
   box-sizing: border-box;
@@ -7,9 +18,18 @@
 
 /* Base page styles */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f1f1f1;
+  font-family: "Inter", Helvetica, Arial, sans-serif;
+  background-color: var(--nasa-black);
+  background-image: radial-gradient(circle at 20% 0%, #15224a 0%, transparent 55%),
+    radial-gradient(circle at 85% 10%, #2a1033 0%, transparent 45%);
+  background-attachment: fixed;
+  color: var(--ink);
   padding: 20px;
+  line-height: 1.5;
+}
+
+body.no-scroll {
+  overflow: hidden;
 }
 
 /* Centered container */
@@ -23,24 +43,53 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 16px;
   padding-top: 20px;
   padding-bottom: 20px;
   margin-bottom: 20px;
 }
 
 h1 {
-  font-family: Verdana, sans-serif;
-  font-weight: bold;
-  color: #212121;
+  font-family: "Inter", Helvetica, Arial, sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #fff;
+  font-size: 2rem;
 }
 
 /* Logo */
 .logo {
   width: 140px;
-  margin-right: 15px;
+  margin-right: 0;
 }
 
-/* Date‐picker & button row */
+/* LevelUp: random space fact */
+.fact-box {
+  background: linear-gradient(90deg, rgba(11, 61, 145, 0.45), rgba(18, 22, 31, 0.6));
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--nasa-red);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+}
+
+.fact-label {
+  display: block;
+  font-family: "DM Mono", "Courier New", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--nasa-red);
+  margin-bottom: 6px;
+}
+
+.fact-text {
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+/* Date-picker & button row */
 .filters {
   display: flex;
   flex-direction: column;
@@ -53,25 +102,38 @@ h1 {
 /* Inputs and buttons */
 input[type="date"],
 button {
-  font-family: Arial, sans-serif;
-  font-weight: normal;
-  color: #666;
-  padding: 10px 15px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  font-family: "Inter", Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  color: var(--ink);
+  background-color: var(--panel);
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
   font-size: 16px;
   line-height: 1.4;
   width: 100%;
 }
 
+input[type="date"]:focus,
+button:focus-visible {
+  outline: 2px solid var(--nasa-red);
+  outline-offset: 2px;
+}
+
 /* Button specific */
 button {
-  background-color: #d3d3d3;
-  color: black;
+  background-color: var(--nasa-blue);
+  color: #fff;
+  border-color: var(--nasa-blue);
   cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: background-color 0.2s ease, transform 0.12s ease;
 }
+
 button:hover {
-  background-color: #bfbfbf;
+  background-color: #0e4bb4;
+  transform: translateY(-1px);
 }
 
 /* Stack horizontally on wider screens */
@@ -80,11 +142,33 @@ button:hover {
     flex-direction: row;
     padding: 0;
   }
-  
+
   input[type="date"],
   button {
     width: auto;
   }
+}
+
+/* Loading message */
+.loading {
+  text-align: center;
+  padding: 50px 20px;
+  color: var(--muted);
+}
+
+.loading-icon {
+  font-size: 44px;
+  margin-bottom: 12px;
+  animation: lift 1.2s ease-in-out infinite;
+}
+
+@keyframes lift {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.hidden {
+  display: none;
 }
 
 /* Gallery flex container */
@@ -92,22 +176,36 @@ button:hover {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  padding: 20px;
+  padding: 20px 0;
   justify-content: center;
 }
 
 /* Gallery items */
 .gallery-item {
-  flex: 1 1 100%;  /* full width by default */
+  position: relative;
+  flex: 1 1 100%;
   min-width: 280px;
   max-width: 500px;
-  background: white;
+  background: var(--panel);
+  border: 1px solid var(--line);
   padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.gallery-item:hover {
+  border-color: var(--nasa-red);
+  transform: translateY(-3px);
+}
+
+.gallery-item:focus-visible {
+  outline: 2px solid var(--nasa-red);
+  outline-offset: 3px;
 }
 
 /* Three columns on wider screens */
@@ -117,17 +215,58 @@ button:hover {
   }
 }
 
-.gallery-item img {
+.gallery-item img,
+.video-tile {
   width: 100%;
   height: 200px;
   object-fit: cover;
-  border-radius: 4px;
+  border-radius: 6px;
+  display: block;
+  /* LevelUp: hover zoom */
+  transition: transform 0.35s ease;
 }
 
-.gallery-item p {
-  margin-top: 10px;
-  padding: 5px;
-  font-size: 14px;
+.gallery-item:hover img,
+.gallery-item:hover .video-tile {
+  transform: scale(1.08);
+}
+
+.video-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--nasa-blue), #1b1030);
+}
+
+.video-badge {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background-color: var(--nasa-red);
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: 999px;
+}
+
+.item-title {
+  margin-top: 12px;
+  padding: 0 4px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.item-date {
+  padding: 2px 4px 4px;
+  font-family: "DM Mono", "Courier New", monospace;
+  font-size: 0.8rem;
+  color: var(--muted);
 }
 
 /* Placeholder content */
@@ -135,10 +274,116 @@ button:hover {
   flex: 1 1 100%;
   text-align: center;
   padding: 40px;
-  color: #666;
+  color: var(--muted);
 }
 
 .placeholder-icon {
   font-size: 48px;
   margin-bottom: 20px;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-card {
+  position: relative;
+  z-index: 1;
+  background-color: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  max-width: 900px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  font-size: 22px;
+  line-height: 1;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--line);
+  color: #fff;
+}
+
+.modal-media img,
+.modal-media iframe {
+  width: 100%;
+  max-height: 62vh;
+  display: block;
+  border: none;
+  border-radius: 12px 12px 0 0;
+  object-fit: contain;
+  background-color: #000;
+}
+
+.modal-media iframe {
+  aspect-ratio: 16 / 9;
+  height: auto;
+}
+
+.video-link {
+  display: block;
+  padding: 40px 24px;
+  text-align: center;
+  color: var(--nasa-red);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.modal-body {
+  padding: 20px 24px 28px;
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.modal-date {
+  font-family: "DM Mono", "Courier New", monospace;
+  font-size: 0.85rem;
+  color: var(--nasa-red);
+  margin-bottom: 14px;
+}
+
+.modal-explanation {
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery-item,
+  .gallery-item img,
+  .video-tile,
+  button,
+  .loading-icon {
+    transition: none;
+    animation: none;
+  }
 }
